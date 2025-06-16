@@ -1,0 +1,142 @@
+/*
+Theme Name: Max Portfolio
+Theme URI: https://codeworkweb.com/wordpress-themes/max-portfolio/
+Template: cww-portfolio
+Text Domain: max-portfolio
+Author: Code Work Web
+Author URI: https://codeworkweb.com/
+Description: This is the child theme of CWW Portfolio. This theme is fully compatible with the popular WordPress page builder Elementor. This is a useful theme for personal portfolio sites to publish your personal websites in a style with easy configuration options. Get free support at https://codeworkweb.com/contact/  and Check demo at https://demo.codeworkweb.com/cww-portfolio/
+Tags: custom-background, custom-logo, custom-menu, featured-images, threaded-comments, translation-ready,sticky-post, rtl-language-support, blog, custom-colors, portfolio
+Version: 1.0.2
+Tested up to: 6.6
+Requires PHP: 7.4
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+
+
+This theme, like WordPress, is licensed under the GPL.
+Use it to make something cool, have fun, and share what you've learned.
+
+Cww Portfolio is based on Underscores https://underscores.me/, (C) 2012-2024 Automattic, Inc.
+Underscores is distributed under the terms of the GNU GPL v2 or later.
+
+*/
+
+body {
+  background-color: #000;
+  color: #cdcdcd;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--theme-color) #333;
+}
+
+body.home header.site-header {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  z-index: 99;
+}
+
+header.site-header {
+  background-color: transparent;
+  padding: 40px 0 20px;
+}
+
+body.admin-bar header.site-header {
+  padding-top: 65px;
+}
+
+.header-cta-wrapp a {
+  padding: 9px 30px;
+  border-radius: 50px;
+  overflow: hidden;
+}
+
+header .header-cta-wrapp a:hover::before {
+  border-radius: 50px;
+  background: #361b69;
+}
+
+header .header-cta-wrapp a:before {
+  background: #361b69;
+}
+
+.max-left-header.cww-flex {
+  gap: 50px;
+  width: 27%;
+}
+
+header .menu-wrapp {
+  width: 70%;
+}
+
+.main-navigation .children a {
+  color: #333;
+}
+
+.main-navigation .sub-menu li a {
+  color: #333;
+}
+
+.max-left-header .site-email a {
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.main-navigation a,
+.site-branding a,
+.entry-meta a,
+a:visited,
+body div a {
+  color: #fff;
+}
+
+.entry-title a,
+header.entry-header h1.entry-title,
+.related-content-wrapper h3.post-title {
+  color: #fff !important;
+}
+
+.entry-content p,
+.nav-links a {
+  color: #cdcdcd !important;
+}
+
+aside.widget-area .widget {
+  background: #272733;
+}
+
+.inner-blog-wrapp .sticky {
+  background: #272733;
+}
+
+@media only screen and (max-width: 768px) {
+  .site-header .cww-menu-outer-wrapp.cww-flex {
+    background: #151329 !important;
+  }
+
+  header .menu-wrapp,
+  .max-left-header.cww-flex {
+    width: auto;
+  }
+
+  header.site-header.is-opened .cww-menu-outer-wrapp {
+    margin-top: 20px;
+  }
+}
+
+.cww-ssf-outer-wrapp.modal .cww-sff-wrapp {
+  color: #333;
+}
+
+.cww-ssf-outer-wrapp.modal .cww-sff-wrapp a {
+  color: var(--theme-color);
+}
+
+body.home.blog header.site-header {
+  position: relative;
+}

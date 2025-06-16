@@ -1,0 +1,41 @@
+{
+	"compilerOptions": {
+		"jsx": "react",
+		"target": "es2020",
+		"lib": ["dom", "es2020", "es2021.promise", "es2022.array"],
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"baseUrl": ".",
+		"paths": {
+			"@qlwapp/*": ["packages/*"]
+		},
+		"typeRoots": [
+			"node_modules/@types",
+			"packages/new-admin-menu/types",
+			"packages/helpers"
+		],
+		"allowJs": true,
+		"declaration": false,
+		"outDir": "dist",
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"strict": false,
+		"skipLibCheck": true,
+		"resolveJsonModule": true,
+		"noImplicitAny": false,
+		"strictNullChecks": false,
+		"strictFunctionTypes": false,
+		"strictBindCallApply": false,
+		"strictPropertyInitialization": false,
+		"noImplicitThis": false,
+		"alwaysStrict": false,
+		"noUncheckedIndexedAccess": false,
+		"isolatedModules": true,
+		"allowSyntheticDefaultImports": true,
+		"ignoreDeprecations": "5.0",
+		"jsxFactory": "React.createElement",
+		"jsxFragmentFactory": "React.Fragment"
+	},
+	"include": ["global.d.ts", "packages/**/*.ts", "packages/**/*.tsx"],
+	"exclude": ["dist", "node_modules", "**/*.spec.ts", "**/*.test.ts"]
+}

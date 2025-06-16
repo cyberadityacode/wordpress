@@ -1,0 +1,274 @@
+<?php
+/**
+ *
+ * @package WPUpper Share Buttons
+ * @author  Victor Freitas
+ * @subpackage Scripts
+ * @version 1.0
+ */
+if ( ! defined( 'ABSPATH' ) ) {
+	 // Exit if accessed directly.
+	exit;
+}
+
+final class WPUSB_Scripts {
+
+	private static $instance = null;
+
+	/**
+	* Initialize the plugin by setting localization, filters, and administration functions.
+	*
+	* @since 1.2
+	*/
+	private function __construct() {
+		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'add_front_scripts' ) );
+		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'admin_scripts' ) );
+	}
+
+	/**
+	 * Enqueue scripts and stylesheets on admin
+	 *
+	 * @since 1.2
+	 * @return void
+	 */
+	public static function admin_scripts() {
+		if ( ! WPUSB_Utils::is_plugin_page() ) {
+			return;
+		}
+
+		self::codemirror_scripts();
+
+		wp_enqueue_style( 'wp-color-picker' );
+		wp_enqueue_script( 'wp-color-picker' );
+		wp_enqueue_script( 'jquery-ui-sortable' );
+
+		if ( WPUSB_Utils::is_sharing_report_page() ) {
+			wp_enqueue_script( 'jquery-ui-datepicker' );
+		}
+
+		if ( WPUSB_Utils::get( 'page' ) === WPUSB_Setting::USE_OPTIONS ) {
+			wp_enqueue_script(
+				WPUSB_Utils::add_prefix( '-admin-scripts-highlight' ),
+				WPUSB_Utils::plugin_url( 'Vendor/highlight.pack.js', '' ),
+				array(),
+				'9.10.0',
+				true
+			);
+		}
+
+		wp_enqueue_script(
+			WPUSB_Utils::add_prefix( '-admin-scripts' ),
+			WPUSB_Utils::build_url( 'admin.js' ),
+			array( 'jquery' ),
+			WPUSB_Utils::filetime( WPUSB_Utils::build_path( 'admin.js' ) ),
+			true
+		);
+
+		wp_localize_script(
+			WPUSB_Utils::add_prefix( '-admin-scripts' ),
+			'WPUSBVars',
+			self::_localize_script_args()
+		);
+
+		$page_settings = WPUSB_Utils::is_panel_home();
+
+		if ( $page_settings ) {
+			$handle = WPUSB_Utils::add_prefix( '-style' );
+			self::add_style_front();
+		}
+
+		wp_enqueue_style(
+			WPUSB_Utils::add_prefix( '-admin-style' ),
+			WPUSB_Utils::build_url( 'admin.css' ),
+			$page_settings ? array( $handle ) : array(),
+			WPUSB_Utils::filetime( WPUSB_Utils::build_path( 'admin.css' ) )
+		);
+	}
+
+	/**
+	 * Arguments admin plugin scripts
+	 *
+	 * @since 3.32
+	 * @return array
+	 */
+	private static function _localize_script_args() {
+		$args = array(
+			'ajaxUrl' => WPUSB_Utils::get_admin_url( 'admin-ajax.php' ),
+			'homeUrl' => esc_url( get_home_url() ),
+			'WPLANG'  => get_locale(),
+		);
+
+		if ( WPUSB_Utils::is_panel_home() ) {
+			$args['previewTitles'] = array(
+				'titleRemove'   => __( 'View Untitled', 'wpupper-share-buttons' ),
+				'counterRemove' => __( 'View without count', 'wpupper-share-buttons' ),
+				'titleInsert'   => __( 'See with title', 'wpupper-share-buttons' ),
+				'counterInsert' => __( 'See with count', 'wpupper-share-buttons' ),
+			);
+		}
+
+		if ( WPUSB_Utils::is_sharing_report_page() ) {
+			$tag = WPUSB_Utils::add_prefix( '_datepicker_defaults' );
+
+			$args['datepickerDefaults'] = apply_filters( $tag, self::get_localize_datepicker() );
+		}
+
+		return $args;
+	}
+
+	/**
+	 * Localizes the jQuery UI datepicker.
+	 *
+	 * @since 3.32
+	 * @link http://api.jqueryui.com/datepicker/#options
+	 * @global WP_Locale $wp_locale
+	 * @return array
+	 */
+	public static function get_localize_datepicker() {
+		global $wp_locale;
+
+		if ( function_exists( 'wp_localize_jquery_ui_datepicker' ) ) {
+			return array();
+		}
+
+		return array(
+			'closeText'       => __( 'Close', 'wpupper-share-buttons' ),
+			'currentText'     => __( 'Today', 'wpupper-share-buttons' ),
+			'dayNames'        => array_values( $wp_locale->weekday ),
+			'dayNamesMin'     => array_values( $wp_locale->weekday_initial ),
+			'dayNamesShort'   => array_values( $wp_locale->weekday_abbrev ),
+			'firstDay'        => absint( get_option( 'start_of_week' ) ),
+			'isRTL'           => $wp_locale->is_rtl(),
+			'monthNames'      => array_values( $wp_locale->month ),
+			'monthNamesShort' => array_map( 'ucfirst', array_values( $wp_locale->month_abbrev ) ),
+			'nextText'        => __( 'Next', 'wpupper-share-buttons' ),
+			'prevText'        => __( 'Previous', 'wpupper-share-buttons' ),
+		);
+	}
+
+	/**
+	 * Enqueue scripts and styles.
+	 *
+	 * @since 1.0
+	 * @since 3.50 - Change the condition to load scripts.
+	 * @return void
+	 */
+	public static function add_front_scripts() {
+		$is_active_follow_us = WPUSB_Utils::is_active_widget_follow();
+
+		if ( $is_active_follow_us ) {
+			self::front_styles();
+		}
+
+		if ( WPUSB_Utils::is_disabled() ) {
+			return;
+		}
+
+		$load_scripts      = apply_filters( WPUSB_Utils::add_prefix( '-add-scripts' ), WPUSB_Utils::is_active() );
+		$customize_preview = WPUSB_Utils::is_customize_preview();
+
+		if ( $load_scripts || WPUSB_Utils::is_active_widget_share() || $customize_preview ) {
+			self::front_javascripts();
+		}
+
+		if ( ! $is_active_follow_us && ( $load_scripts || WPUSB_Utils::is_active_widget() || $customize_preview ) ) {
+			self::front_styles();
+		}
+	}
+
+	/**
+	 * Enqueue front scripts
+	 *
+	 * @since 3.1.0
+	 * @return void
+	 */
+	public static function front_javascripts() {
+		if ( 'on' === WPUSB_Utils::option( 'disable_js' ) ) {
+			return;
+		}
+
+		$context = WPUSB_Utils::option( 'fixed_context' );
+
+		wp_enqueue_script(
+			WPUSB_Utils::add_prefix( '-scripts' ),
+			WPUSB_Utils::build_url( 'front.js' ),
+			array( 'jquery' ),
+			WPUSB_PLUGIN_VERSION,
+			true
+		);
+
+		wp_localize_script(
+			WPUSB_Utils::add_prefix( '-scripts' ),
+			'WPUSBVars',
+			array(
+				'ajaxUrl'  => WPUSB_Utils::get_admin_url( 'admin-ajax.php' ),
+				'context'  => str_replace( '{id}', WPUSB_Utils::get_id(), $context ),
+				'minCount' => WPUSB_Utils::option( 'min_count_display', 0, 'absint' ),
+			)
+		);
+	}
+
+	/**
+	 * Front styles validate
+	 *
+	 * @since 3.1.0
+	 * @return void
+	 */
+	public static function front_styles() {
+		if ( WPUSB_Utils::is_disabled_css() ) {
+			return;
+		}
+
+		if ( 'on' === WPUSB_Utils::option( 'css_footer' ) ) {
+			return add_action( 'wp_footer', array( __CLASS__, 'add_style_front' ) );
+		}
+
+		self::add_style_front();
+	}
+
+	/**
+	 * Enqueue front styles
+	 *
+	 * @since 3.1.0
+	 * @return void
+	 */
+	public static function add_style_front() {
+		wp_enqueue_style(
+			WPUSB_Utils::add_prefix( '-style' ),
+			WPUSB_Utils::build_url( self::get_front_css_path() ),
+			array(),
+			WPUSB_Utils::filetime( WPUSB_Utils::build_path( self::get_front_css_path() ) )
+		);
+	}
+
+	public static function codemirror_scripts() {
+		if ( ! WPUSB_Utils::is_custom_css_page() ) {
+			return;
+		}
+
+        wp_enqueue_script( 'wp-codemirror' );
+        wp_enqueue_script( 'csslint' );
+        wp_enqueue_style( 'wp-codemirror' );
+	}
+
+	public static function get_front_css_path() {
+		if ( WPUSB_Utils::file_css_min_exists() ) {
+			return WPUSB_Utils::get_path_css_min();
+		}
+
+		return 'style.css';
+	}
+
+	/**
+	 * Singleton instance
+	 *
+	 * @since 3.22
+	 * @return void
+	 */
+	public static function instance() {
+		if ( is_null( self::$instance ) ) {
+			self::$instance = new self();
+		}
+	}
+}
+WPUSB_Scripts::instance();
