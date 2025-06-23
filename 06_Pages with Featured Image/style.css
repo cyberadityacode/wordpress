@@ -1,0 +1,44 @@
+
+/*
+Theme Name: My Custom Theme
+Author: Aditya Dubey
+Version: 1.0
+*/
+*{
+    margin: 0;
+    box-sizing: border-box;
+}
+
+h2{
+    color: brown;
+}
+
+.post-content{
+    color: black;
+    font-size: large;
+}
+
+.menu{
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.menu li a {
+    text-decoration: none;
+    color: #333;
+}
+
+.menu li:hover{
+    scale: 1.2;
+    color: brown;
+}
+
+.page-featured-image img{
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    border-radius: 8px;
+}
