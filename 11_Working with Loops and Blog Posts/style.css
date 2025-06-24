@@ -1,0 +1,41 @@
+/* 
+Theme Name: Working Loop
+Author: Aditya Dubey
+Version: 1.0
+Description: Work with The Loop and display blog posts
+*/
+
+p {
+  font-style: italic;
+}
+
+.blog-posts {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: flex-start;
+  width: 550px;
+  background-color: antiquewhite;
+  gap: 20px;
+  border: 1px solid rgba(152, 0, 0, 0.705);
+  padding: 5px 5px;
+}
+
+.blog-post-thumbnail img {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.blog-posts:hover {
+  scale: 1.05;
+}
+
+.blog-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
