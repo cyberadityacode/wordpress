@@ -1,0 +1,118 @@
+/* 
+Theme Name: Menu and Widget
+Author: Aditya Dubey
+Version: 1.0
+Description: Register a menu with `register_nav_menus()` in `functions.php`
+*/
+
+p {
+  font-style: italic;
+}
+
+.blog-posts {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: flex-start;
+  width: 550px;
+  background-color: antiquewhite;
+  gap: 20px;
+  border: 1px solid rgba(152, 0, 0, 0.705);
+  padding: 5px 5px;
+}
+
+.blog-post-thumbnail img {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.blog-posts:hover {
+  scale: 1.05;
+}
+
+.blog-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Nav menu */
+
+.main-nav {
+  display: flex;
+  list-style: none;
+  gap: 20px;
+  padding: 0;
+  font-size: large;
+}
+.main-nav li {
+  display: inline-block;
+}
+.main-nav a {
+  text-decoration: none;
+}
+
+.main-nav a:hover {
+  text-decoration: underline;
+}
+
+/* 2 columns */
+
+.blog-layout {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Left column - blog posts */
+.blog-posts {
+  flex: 2;
+}
+
+/* Right column - sidebar */
+.blog-sidebar {
+  flex: 1;
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-left: 3px solid #ccc;
+}
+
+.single-post {
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #ddd;
+}
+
+.post-thumb img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+.widget {
+  margin-bottom: 20px;
+}
+
+.widget-title {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+@media screen and (max-width: 768px) {
+  .blog-layout {
+    flex-direction: column;
+  }
+
+  .blog-sidebar {
+    border-left: none;
+    border-top: 3px solid #ccc;
+    margin-top: 20px;
+  }
+}
