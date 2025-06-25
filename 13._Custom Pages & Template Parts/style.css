@@ -1,0 +1,27 @@
+/* 
+Theme Name: Get Template Part
+Author: Aditya Dubey
+Version: 1.0
+Description: Understanding Get Template Part in WordPress Theme.
+*/
+
+.pagination {
+  text-align: center;
+  margin: 30px 0;
+}
+
+.pagination .page-numbers {
+  display: inline-block;
+  padding: 8px 12px;
+  margin: 0 4px;
+  background: #eee;
+  color: #333;
+  text-decoration: none;
+  border-radius: 4px;
+}
+
+.pagination .current {
+  background: #333;
+  color: #fff;
+  font-weight: bold;
+}
