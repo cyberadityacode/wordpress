@@ -1,0 +1,19 @@
+/**
+Theme Name: Theme Customizer Integration
+Author: Aditya Dubey
+Version: 1.0
+Description: Add real-time editing options for users
+*/
+
+.custom-logo {
+  max-width: 150px; /* change as needed */
+  height: auto;
+}
+
+body {
+  background-color: var(--primary-color);
+}
+
+a {
+  color: var(--primary-color);
+}
