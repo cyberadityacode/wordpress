@@ -1,0 +1,21 @@
+/*
+Theme Name: Ajax Theme Two
+Author: Aditya Dubey
+Version : 1.0.0
+Description: AJAX Theme 2 with jQuery and React integration
+*/
+
+h1 {
+  color: rgb(89, 5, 5);
+}
+
+.fetch-posts-parent {
+  display: flex;
+  justify-content: center;
+  border: 2px solid black;
+  padding: 5px 10px;
+}
+
+#load-posts-btn {
+  padding: 10px 20px;
+}
