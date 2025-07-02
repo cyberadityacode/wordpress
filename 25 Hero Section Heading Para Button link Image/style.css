@@ -1,0 +1,89 @@
+/*
+Theme Name: Ajax Theme Three
+Author: Aditya Dubey
+Version: 1.0
+Description: Ajax theme to fetch and display posts
+*/
+
+h1 {
+  color: black;
+}
+
+.pagination {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+.pagination-btn.active {
+  background-color: #0073aa;
+  color: white;
+}
+
+.filters {
+  margin-bottom: 20px;
+}
+.filters select {
+  padding: 8px;
+  margin-right: 10px;
+}
+
+#search-input {
+  padding: 8px;
+}
+
+/* hero section */
+
+.hero-section {
+  display: flex;
+  flex-direction: row;
+  width: fit;
+  height: auto;
+  background-color: bisque;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.hero-section button {
+  width: 150px;
+  padding: 10px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-img img {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background-color: aqua;
+}
+
+.hero-head-para {
+  display: flex;
+  flex-direction: column;
+  padding-left: 20px;
+  justify-content: center;
+  align-items: center;
+  font-size: large;
+}
+
+.hero-head-para a {
+  text-decoration: none;
+}
+.hero-head-para button {
+  cursor: pointer;
+}
+
+.hero-head-para h1 {
+  border: 1px solid red;
+  padding: 10px;
+  border-radius: 7px;
+}
+.hero-head-para p {
+  font-size: 22px;
+}
