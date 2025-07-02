@@ -1,0 +1,27 @@
+/*
+Theme Name: Ajax Theme Three
+Author: Aditya Dubey
+Version: 1.0
+Description: Ajax theme to fetch and display posts
+*/
+
+h1 {
+  color: black;
+}
+
+.pagination-btn.active {
+  background-color: #0073aa;
+  color: white;
+}
+
+.filters {
+  margin-bottom: 20px;
+}
+.filters select {
+  padding: 8px;
+  margin-right: 10px;
+}
+
+#search-input {
+  padding: 8px;
+}
