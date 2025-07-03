@@ -1,4 +1,4 @@
-# Custom Plugin Development 6
+# Custom Plugin Development 7
 
 Plugin De-Activation Hook
 How to DROP Database Table Dynamically

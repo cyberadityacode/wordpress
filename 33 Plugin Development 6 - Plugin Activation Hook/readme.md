@@ -3,7 +3,6 @@
 Plugin Activation Hook
 How to create Dynamic Database Table
 
-Great! You've written a neat and functional custom plugin that does **the following**:
 
 ---
 
