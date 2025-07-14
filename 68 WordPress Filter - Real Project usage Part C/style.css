@@ -1,0 +1,12 @@
+/* 
+Theme Name: Filter C
+Author: Aditya Dubey
+Version: 3.0
+Description: Use Filters in Real Projects
+*/
+
+.promo{
+    color: red;
+    text-align: center;
+    font-size: 24px;
+}
