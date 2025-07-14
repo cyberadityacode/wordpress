@@ -1,0 +1,12 @@
+/* 
+Theme Name: Filter D
+Author: Aditya Dubey
+Version: 1.0
+Description: Use Custom Filters
+*/
+
+.promo {
+  color: red;
+  text-align: center;
+  font-size: 24px;
+}
