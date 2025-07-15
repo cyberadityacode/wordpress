@@ -1,0 +1,1316 @@
+# WordPress Filters
+
+# Day 1: **Filters – The Core of WordPress Customization**
+
+---
+
+## Objectives for Day 1
+
+By the end of this lesson, you will:
+
+- Understand what a filter is.
+- Know how filters work in WordPress.
+- Use `add_filter()` in a theme or plugin.
+- Write your own basic filter function.
+- Practice with real examples.
+- Pass a mini-quiz and homework challenge.
+
+---
+
+## What Is a Filter in WordPress?
+
+A **filter** in WordPress allows you to **change data before it is shown or saved**—without editing the original source.
+
+> Think of it as a **custom lens** that modifies what you see or store.
+
+---
+
+## WordPress Filter Anatomy
+
+### Two Main Functions:
+
+#### 1. `add_filter()`: **Hook your function to a filter**
+
+```php
+add_filter('filter_name', 'your_callback_function');
+```
+
+#### 2. `apply_filters()`: **WordPress triggers this internally**
+
+```php
+$value = apply_filters('filter_name', $value);
+```
+
+- You don’t usually use `apply_filters()` unless you're creating custom filters. For Day 1, focus on `add_filter()`.
+
+---
+
+## Basic Example: Modify Post Title
+
+```php
+function modify_post_title($title) {
+    return '🔥 ' . $title;
+}
+add_filter('the_title', 'modify_post_title');
+```
+
+**What It Does:** Adds a 🔥 emoji to every post title.
+
+---
+
+## Where to Write This Code?
+
+For testing:
+
+- Paste it into your theme’s `functions.php` file **(recommended for now)**
+- Or create a simple plugin (we’ll cover plugin creation soon)
+
+---
+
+## Common Parameters of `add_filter`
+
+```php
+add_filter('hook_name', 'callback_function', $priority, $accepted_args);
+```
+
+| Parameter           | Description                               |
+| ------------------- | ----------------------------------------- |
+| `hook_name`         | The filter hook name (e.g. `the_title`)   |
+| `callback_function` | Your function to process the data         |
+| `priority`          | Optional: Order of execution (default 10) |
+| `accepted_args`     | Optional: Number of arguments to accept   |
+
+---
+
+## Practical Exercises
+
+### 1. Add Emoji to Titles
+
+```php
+function add_emoji_to_title($title) {
+    return '📘 ' . $title;
+}
+add_filter('the_title', 'add_emoji_to_title');
+```
+
+### 2. Change "Read More" Link in Excerpt
+
+```php
+function custom_excerpt_more($more) {
+    return '... 👉 Read more';
+}
+add_filter('excerpt_more', 'custom_excerpt_more');
+```
+
+### 3. Set Excerpt Length to 15 Words
+
+```php
+function custom_excerpt_length($length) {
+    return 15;
+}
+add_filter('excerpt_length', 'custom_excerpt_length');
+```
+
+### 4. Append Signature to Post Content
+
+```php
+function add_signature_to_content($content) {
+    if (is_single()) {
+        $content .= '<p><em>— Written by Aditya Dubey</em></p>';
+    }
+    return $content;
+}
+add_filter('the_content', 'add_signature_to_content');
+```
+
+---
+
+## Mini Project Task (Live Practice)
+
+💡 Add a short message like "Thanks for visiting!" at the bottom of every blog post using a filter.
+
+**Hint:** Use `the_content` filter. Make sure to use `is_single()`.
+
+---
+
+## Quiz – Test Your Day 1 Knowledge
+
+1. Which function is used to hook a function into a WordPress filter?
+2. What does `apply_filters()` do?
+3. Can you use multiple filters on the same hook?
+4. What does the `priority` parameter in `add_filter()` control?
+
+<details>
+<summary>📝 Answers</summary>
+
+1. `add_filter()`
+2. Triggers the filter and passes data through all attached functions
+3. ✅ Yes, each will run in priority order
+4. It determines the order of execution (lower runs earlier)
+
+</details>
+
+---
+
+## Homework Challenge (Submission Optional)
+
+- Create three filters in your theme:
+
+1. Add a 🔔 emoji at the start of each post title
+2. Append “\~ From Aditya’s Blog” at the end of each post content
+3. Change excerpt “...” to say “ → Continue”
+
+You can paste your code here, and I’ll **review and give you feedback**!
+
+---
+
+## Summary of What You Learned Today
+
+- What filters are and why they’re important
+- How `add_filter()` works
+- Real examples using `the_title`, `the_content`, `excerpt_more`, and more
+- How to practice safely in `functions.php`
+
+---
+
+## What's Next in Day 2?
+
+- Discover the most powerful built-in WordPress filters
+- Use `body_class`, `widget_title`, `comment_text`, and more
+- Real-world scenarios for customizing themes and plugins
+
+---
+
+Would you like me to:
+
+- Set up a GitHub repo template for your bootcamp?
+- Send a starter plugin scaffold?
+- Continue with **Day 2** right away?
+
+Let me know how you want to proceed!
+
+# Day 2: **Mastering Built-In Filters in WordPress**
+
+---
+
+## Objectives for Day 2
+
+By the end of this session, you’ll be able to:
+
+- Identify common built-in filters in WordPress.
+- Modify theme and plugin output using those filters.
+- Apply filters to various WordPress parts like body class, widgets, comments, and more.
+- Write 5+ practical filter implementations.
+
+---
+
+## 🔍 Why Built-in Filters Are Powerful
+
+WordPress core, themes, and plugins often call `apply_filters()` internally to allow **developers like you** to modify things without touching core code.
+
+📌 Think of it like this:
+
+> "Hey developer, want to tweak what I'm about to output? Just hook into this filter!"
+
+---
+
+## 🧰 Most Useful Built-in Filters (with Use Cases)
+
+| Filter Name      | What it Filters               | Use Case                                |
+| ---------------- | ----------------------------- | --------------------------------------- |
+| `the_title`      | Post/page title               | Add emojis or prefixes                  |
+| `the_content`    | Full post content             | Add signature, ads, promo blocks        |
+| `excerpt_length` | Number of words in excerpt    | Control snippet size                    |
+| `excerpt_more`   | "..." after excerpt           | Customize read more link                |
+| `body_class`     | Classes added to `<body>` tag | Add dynamic classes based on context    |
+| `widget_title`   | Title of widgets              | Add icons or styling to widget headings |
+| `comment_text`   | The actual comment text       | Censor or format comments               |
+
+---
+
+## ✅ Built-in Filter Examples
+
+### 🔹 1. `body_class`: Add Dynamic Class
+
+```php
+function add_custom_body_class($classes) {
+    if (is_single()) {
+        $classes[] = 'single-post-layout';
+    }
+    return $classes;
+}
+add_filter('body_class', 'add_custom_body_class');
+```
+
+👀 Output:
+
+```html
+<body class="home blog single-post-layout"></body>
+```
+
+---
+
+### 🔹 2. `excerpt_more`: Customize the "..."
+
+```php
+function custom_excerpt_more($more) {
+    return '… 👉 Continue';
+}
+add_filter('excerpt_more', 'custom_excerpt_more');
+```
+
+---
+
+### 🔹 3. `widget_title`: Add Emoji
+
+```php
+function add_icon_to_widget_title($title) {
+    return '🧰 ' . $title;
+}
+add_filter('widget_title', 'add_icon_to_widget_title');
+```
+
+---
+
+### 🔹 4. `comment_text`: Filter Comments
+
+```php
+function censor_bad_words($comment_text) {
+    return str_ireplace('badword', '****', $comment_text);
+}
+add_filter('comment_text', 'censor_bad_words');
+```
+
+---
+
+### 🔹 5. `the_content`: Insert Custom Message
+
+```php
+function promo_banner_after_content($content) {
+    if (is_single()) {
+        $content .= '<div class="promo-box">🔥 Don’t miss our new article!</div>';
+    }
+    return $content;
+}
+add_filter('the_content', 'promo_banner_after_content');
+```
+
+---
+
+## 🧘 Practice Tasks (Try These in Theme)
+
+### Task 1:
+
+Add a custom CSS class `from-aditya` to all pages using `body_class`.
+
+### Task 2:
+
+Change all widget titles to uppercase using `widget_title`.
+
+### Task 3:
+
+Replace the word “WordPress” in comments with “WP 🚀” using `comment_text`.
+
+### Task 4:
+
+Add a note like “Last updated on \[Date]” to the bottom of post content using `the_content`.
+
+---
+
+## ⚙️ Developer Tip: How to Find More Filters
+
+You can find filters in:
+
+- WordPress Core: Search for `apply_filters(` in `/wp-includes/` or `/wp-admin/`
+- Plugin code: Use VS Code search to find `apply_filters`
+- Official docs: [https://developer.wordpress.org/reference/hooks/](https://developer.wordpress.org/reference/hooks/)
+
+---
+
+## ✅ Real-World Example Use Case
+
+### Situation:
+
+You want your blog to look like a premium site where:
+
+- All post titles have an article number (e.g., “#42 My Journey”).
+- Widget titles show the section emoji (e.g., 📚 Resources).
+- Each blog post ends with a note saying: “Follow me on Instagram!”
+
+### Implementation Plan:
+
+```php
+// Post Title
+function number_title($title) {
+    static $count = 1;
+    return '#' . $count++ . ' ' . $title;
+}
+add_filter('the_title', 'number_title');
+
+// Widget Title
+add_filter('widget_title', function($title) {
+    return '📚 ' . $title;
+});
+
+// Content Footer
+function ig_follow_footer($content) {
+    if (is_single()) {
+        $content .= '<p>📷 Follow me: @adityadubey.dev</p>';
+    }
+    return $content;
+}
+add_filter('the_content', 'ig_follow_footer');
+```
+
+---
+
+## 🧠 Day 2 Quiz
+
+1. Which filter would you use to change the number of words in the excerpt?
+2. What does the `body_class` filter return?
+3. Can you use anonymous functions in `add_filter()`?
+4. What’s the difference between `the_content` and `the_excerpt` filters?
+
+<details>
+<summary>📝 Answers</summary>
+
+1. `excerpt_length`
+2. An array of classes
+3. ✅ Yes
+4. `the_content` is for full content; `the_excerpt` is for summary
+
+</details>
+
+---
+
+## 🧪 Homework Challenge
+
+🎯 Add the following to your `functions.php` file or a custom plugin:
+
+1. Filter all post titles to start with “📝”.
+2. Make all widget titles uppercase + add emoji prefix “🔧”.
+3. Add a promo block after each post like:
+   _“🎁 Free eBook: 5 Steps to Become a Dev”_
+4. Replace all instances of “plugin” in comment text with “plugin 🔌”.
+
+📩 You can paste your code here for feedback!
+
+---
+
+## ✅ Summary of What You Learned
+
+- How to **use core WordPress filters** like `body_class`, `widget_title`, `the_content`, and more.
+- Real-world customization without modifying templates.
+- Using `add_filter()` with arrays, strings, and anonymous functions.
+
+---
+
+# Day 3: **Using Filters in Real Projects**
+
+---
+
+## Objectives for Day 3
+
+By the end of this session, you'll be able to:
+
+- Use filters dynamically with WordPress conditionals like `is_single()`, `is_page()`, `is_home()`, etc.
+- Insert styled blocks of HTML using filters.
+- Customize both theme and plugin outputs using filters.
+- Build a mini real-world filter-based system.
+
+---
+
+## Key Concepts to Learn
+
+| Topic           | What it does                                  |
+| --------------- | --------------------------------------------- |
+| `is_single()`   | Checks if a single post is being viewed       |
+| `is_page()`     | Checks for a specific page                    |
+| `is_home()`     | Checks if it’s the blog home                  |
+| `is_category()` | Checks if a category archive is viewed        |
+| `is_admin()`    | Checks if you're on the backend (admin panel) |
+
+You’ll use these in **filter callback functions** to make your filters **context-aware**.
+
+---
+
+## Real-Life Filter Examples with Conditionals
+
+---
+
+### 1. Add a “Thank you for reading!” message **only on blog posts**
+
+```php
+function add_reading_note($content) {
+    if (is_single() && is_main_query()) {
+        $content .= '<p style="font-style: italic;">🙏 Thank you for reading!</p>';
+    }
+    return $content;
+}
+add_filter('the_content', 'add_reading_note');
+```
+
+---
+
+### 2. Add a class to the body **only on About page**
+
+```php
+function add_about_page_class($classes) {
+    if (is_page('about')) {
+        $classes[] = 'about-highlight';
+    }
+    return $classes;
+}
+add_filter('body_class', 'add_about_page_class');
+```
+
+---
+
+### 3. Add a custom promotion **on blog home page**
+
+```php
+function home_page_banner($content) {
+    if (is_home() && is_main_query()) {
+        $content = '<div class="promo">🎉 Welcome to our blog! Don’t miss our latest updates.</div>' . $content;
+    }
+    return $content;
+}
+add_filter('the_content', 'home_page_banner');
+```
+
+---
+
+## Pro Developer Tip
+
+✅ Always use `is_main_query()` to avoid affecting widgets, sliders, or sidebar loops.
+
+---
+
+## Practice Tasks
+
+1. Add a note like “📅 This was posted on: \[date]” after post content (only for posts).
+2. Add custom CSS class to body only if the page slug is **contact**.
+3. Add a badge like “🌟 Popular Post” before titles of posts in the **category 'featured'**.
+
+<details>
+<summary>💡 Hint for Task 3</summary>
+
+Use `has_category('featured')` inside the `the_title` filter.
+
+</details>
+
+---
+
+## Mini Project: “Blog Booster Filters”
+
+Let’s now build a practical **filter-based module** that enhances your blog without touching templates.
+
+---
+
+### File: `functions.php` or plugin file
+
+```php
+// ✅ Add a welcome box to homepage
+function blog_home_welcome($content) {
+    if (is_home() && is_main_query()) {
+        $box = '<div class="welcome-box" style="background:#f7f7f7;padding:10px;border:1px solid #ddd;margin-bottom:20px;">
+                    👋 Welcome to Aditya’s Blog! Explore insightful articles below.
+                </div>';
+        return $box . $content;
+    }
+    return $content;
+}
+add_filter('the_content', 'blog_home_welcome');
+
+
+//  Add post-date info to the bottom of each post
+function post_date_info($content) {
+    if (is_single() && is_main_query()) {
+        $date = get_the_date();
+        $content .= "<p style='font-size: 0.9em;'>📅 Published on: {$date}</p>";
+    }
+    return $content;
+}
+add_filter('the_content', 'post_date_info');
+
+
+//  Add class to body on category archive
+function category_archive_class($classes) {
+    if (is_category()) {
+        $classes[] = 'category-archive-page';
+    }
+    return $classes;
+}
+add_filter('body_class', 'category_archive_class');
+```
+
+Congratulations — you just built a mini content enhancement plugin with filters!
+
+---
+
+## Day 3 Quiz
+
+1. What does `is_single()` return?
+2. Why should you use `is_main_query()`?
+3. Which filter would you use to add a block after post content?
+4. How would you detect if the page being viewed is “About”?
+
+<details>
+<summary>✅ Answers</summary>
+
+1. It returns true if a single post is being viewed
+2. To avoid affecting secondary queries like widgets or custom loops
+3. `the_content`
+4. Use `is_page('about')`
+
+</details>
+
+---
+
+## Homework Challenge
+
+-Implement the following enhancements using filters:
+
+1. For posts in category “updates”, prepend title with “🆕”.
+2. On the contact page, add a notice: “📞 We usually respond within 24 hours.”
+3. Add a unique class `user-{user_id}` to `<body>` tag (use `get_current_user_id()`).
+4. In comments, replace the word “support” with “assistance 💡”.
+
+Submit here for review if you'd like!
+
+---
+
+## Summary of What You Learned
+
+- Using **conditional tags** with filters for dynamic behavior
+- Applying filters to **real-world blog layouts**
+- Writing context-aware and user-specific filters
+
+---
+
+## What’s Next in Day 4?
+
+Next, you'll learn to:
+
+- Create **custom filter hooks** using `apply_filters()`
+- Make your code extensible so others can hook into it
+- Build a mini framework-like plugin that supports 3rd-party modifications
+
+---
+
+Excellent, Aditya! Today, you level up. You're no longer just using filters—you'll **create your own**. This is what real WordPress professionals do to make their plugins and themes **extensible, clean, and developer-friendly**.
+
+---
+
+# Day 4: **Creating Your Own Custom Filters**
+
+---
+
+## Objectives for Day 4
+
+By the end of today’s session, you’ll be able to:
+
+- Understand how and why to create your own filters.
+- Use `apply_filters()` to allow others to modify your plugin/theme behavior.
+- Build functions that are **open for extension**.
+- Build a mini plugin that exposes multiple custom filter hooks.
+
+---
+
+## Why Create Custom Filters?
+
+WordPress plugins and themes expose hooks so other developers (or yourself later) can modify them without hacking the source.
+
+> **Open Source Rule #1**: Don’t hard-code what could be filtered.
+
+---
+
+## The Anatomy of `apply_filters()`
+
+```php
+$new_value = apply_filters('filter_hook_name', $original_value, $optional_args...);
+```
+
+| Part                 | Purpose                                        |
+| -------------------- | ---------------------------------------------- |
+| `'filter_hook_name'` | Unique name for your filter hook               |
+| `$original_value`    | The default or raw value to be filtered        |
+| `$optional_args...`  | Extra values that your filter function can use |
+
+---
+
+## How it Works
+
+1. You define a **filter hook** using `apply_filters()`.
+2. Other developers use `add_filter()` to attach to that hook.
+3. The returned value from each filter is passed to the next.
+
+---
+
+## Simple Example – Custom Greeting
+
+### Step 1: Create a filter hook
+
+```php
+function show_greeting() {
+    $greeting = apply_filters('custom_greeting_text', 'Hello, Aditya!');
+    echo $greeting;
+}
+```
+
+### Step 2: Allow another developer (or yourself) to modify it
+
+```php
+add_filter('custom_greeting_text', function($text) {
+    return $text . ' 😊 Have a great day!';
+});
+```
+
+Output: `Hello, Aditya! 😊 Have a great day!`
+
+---
+
+## Example with Multiple Arguments
+
+```php
+function show_discount_price($price, $coupon) {
+    $discounted_price = apply_filters('apply_discount', $price, $coupon);
+    echo "Final Price: Rs. $discounted_price";
+}
+
+// Now someone can do:
+add_filter('apply_discount', function($price, $coupon) {
+    if ($coupon === 'ADITYA10') {
+        return $price * 0.9;
+    }
+    return $price;
+}, 10, 2);
+```
+
+`apply_filters()` accepts multiple arguments, and `add_filter()` must match using the last parameter.
+
+---
+
+## Use Cases for Custom Filters
+
+| Use Case                  | Example Hook Name           |
+| ------------------------- | --------------------------- |
+| Customizing pricing rules | `myplugin_price`            |
+| Custom footer message     | `mytheme_footer_text`       |
+| Email subject or body     | `myplugin_email_subject`    |
+| User role modification    | `myplugin_user_role`        |
+| Output of shortcodes      | `myplugin_shortcode_output` |
+
+---
+
+## Plugin Example: “Aditya’s Quote Box”
+
+Let’s create a basic plugin that:
+
+- Displays a motivational quote
+- Uses a custom filter `aditya_quote_message`
+- Allows others to modify the quote
+
+---
+
+### 📁 Folder: `aditya-quote-box`
+
+**🗂️ aditya-quote-box.php**
+
+```php
+<?php
+/*
+Plugin Name: Aditya Quote Box
+Description: Shows an inspiring quote with a filter hook.
+Version: 1.0
+*/
+
+function show_quote_box() {
+    $quote = apply_filters('aditya_quote_message', '“Success is not final, failure is not fatal: it is the courage to continue that counts.”');
+    echo "<div style='padding:10px; background:#f0f0f0; border-left:4px solid #0073aa;'>$quote</div>";
+}
+add_action('wp_footer', 'show_quote_box');
+```
+
+---
+
+### Filter it from a Theme
+
+In your theme’s `functions.php`:
+
+```php
+add_filter('aditya_quote_message', function($quote) {
+    return '🚀 “The future belongs to those who believe in the beauty of their dreams.” – Eleanor Roosevelt';
+});
+```
+
+🖥️ Check your site’s **footer**, and boom! The quote changes without editing the plugin.
+
+---
+
+## Day 4 Quiz
+
+1. What function is used to create a filter hook?
+2. Can `apply_filters()` pass multiple arguments?
+3. In `add_filter()`, how do you specify how many arguments to accept?
+4. Why should plugin developers use `apply_filters()`?
+
+<details>
+<summary>✅ Answers</summary>
+
+1. `apply_filters()`
+2. ✅ Yes
+3. The 4th parameter (e.g., `add_filter(..., ..., ..., 2)`)
+4. To let others customize plugin behavior without editing core
+
+</details>
+
+---
+
+## Homework Challenge
+
+### Build a mini plugin (or write in `functions.php`) that:
+
+1. Outputs a heading using a filter `aditya_custom_heading`.
+2. Defaults to “Welcome to My Website”, but allows other devs to change it.
+3. Add a second filter `aditya_heading_style` to allow customizing inline CSS (font size, color, etc.)
+
+📌 **Bonus:** Make both filters work together to show:
+
+```html
+<h2 style="color:blue; font-size:24px;">Namaste, Aditya!</h2>
+```
+
+Send me your code if you'd like a review.
+
+---
+
+## Summary of What You Learned
+
+- How to **create your own filter hooks** with `apply_filters()`
+- How to make your plugin or theme **extensible and developer-friendly**
+- The importance of documenting your filter names clearly
+- How to pass **multiple arguments through filters**
+
+---
+
+## Up Next: Day 5 – Advanced Filters
+
+In Day 5, you’ll learn:
+
+- Priorities and multiple callbacks on a single hook
+- Combining filters with anonymous functions and closures
+- Building **filter chains** to modify data in stages
+- Practical use of filters in API and database functions
+
+
+---
+
+# Day 5: **Advanced Filters & Real-World Architectures**
+
+---
+
+## Day 5 Objectives
+
+By the end of today, you’ll confidently be able to:
+
+- Use multiple filters on the same hook with different **priorities**
+- Work with **multiple arguments** in filters
+- Chain filters like a **data transformation pipeline**
+- Use **anonymous (lambda) functions**
+- Structure filters for production-level plugins
+
+---
+
+## 1. Using Priority in Filters
+
+The third parameter in `add_filter()` controls **execution order**. Lower numbers run first.
+
+### Example:
+
+```php
+add_filter('the_title', 'add_prefix', 5);
+add_filter('the_title', 'add_suffix', 20);
+
+function add_prefix($title) {
+    return '🔥 ' . $title;
+}
+
+function add_suffix($title) {
+    return $title . ' 🎯';
+}
+```
+
+🖨️ Output: `🔥 My Blog Post 🎯`
+
+---
+
+## Pro Tip:
+
+Use different priorities when:
+
+- You want to prepend before other plugins/themes
+- Or clean something after others have modified the value
+
+---
+
+## 2. Passing Multiple Arguments Through Filters
+
+If your filter modifies complex logic, you can pass more than one argument.
+
+### Plugin-side (`apply_filters()`):
+
+```php
+$price = apply_filters('final_price', 1000, 0.18); // 18% GST
+```
+
+### User-side (`add_filter()`):
+
+```php
+add_filter('final_price', function($price, $tax) {
+    return $price + ($price * $tax);
+}, 10, 2);
+```
+
+📌 The `2` at the end tells WordPress: “My function accepts 2 arguments.”
+
+---
+
+## 3. Filter Chaining (Functional Programming Style)
+
+Filters can be **chained** like pipes.
+
+```php
+add_filter('text_cleaner', function($text) {
+    return strip_tags($text);
+}, 5);
+
+add_filter('text_cleaner', function($text) {
+    return trim($text);
+}, 10);
+
+add_filter('text_cleaner', function($text) {
+    return ucfirst($text);
+}, 15);
+
+$text = apply_filters('text_cleaner', "   <b>hello world</b>   ");
+```
+
+🖨️ Output: `Hello world`
+
+---
+
+## 4. Anonymous Functions (Closures) with Filters
+
+Using `function() {}` is cleaner when logic is short and doesn’t need reuse.
+
+```php
+add_filter('aditya_motivation', function($msg) {
+    return $msg . " 🌟 Keep going!";
+});
+```
+
+This is also safer if you **only need that filter in one place**.
+
+---
+
+## 5. Creating “Filter Framework” in Plugins
+
+Let’s say you have a plugin to show user bio.
+
+### `bio-plugin.php`
+
+```php
+function get_user_bio($user_id) {
+    $bio = get_user_meta($user_id, 'bio', true);
+    $bio = apply_filters('aditya_user_bio', $bio, $user_id);
+    return $bio;
+}
+```
+
+Now in your theme:
+
+```php
+add_filter('aditya_user_bio', function($bio, $user_id) {
+    return $bio . "<br><small>User ID: $user_id</small>";
+}, 10, 2);
+```
+
+✅ This gives users of your plugin full **control over output**.
+
+---
+
+## Real-World Use Case: Pricing Engine
+
+Let’s create a pricing system where:
+
+1. Price is discounted
+2. GST is added
+3. Total is formatted
+
+### `apply_filters` (Plugin logic)
+
+```php
+function calculate_total_price($base_price) {
+    $final = apply_filters('aditya_total_price', $base_price);
+    return "Final Price: ₹" . $final;
+}
+```
+
+### `add_filter` (Business logic)
+
+```php
+add_filter('aditya_total_price', function($price) {
+    return $price * 0.9; // 10% discount
+}, 5);
+
+add_filter('aditya_total_price', function($price) {
+    return $price + ($price * 0.18); // Add 18% GST
+}, 10);
+
+add_filter('aditya_total_price', function($price) {
+    return number_format($price, 2); // Format nicely
+}, 15);
+```
+
+🎯 Output for ₹1000: `Final Price: ₹1062.00`
+
+---
+
+## Day 5 Quiz
+
+1. What happens if two filters are hooked to the same name?
+2. How do you specify a filter function that takes multiple arguments?
+3. What is the use of priority in `add_filter()`?
+4. Can you use a closure/anonymous function with a filter?
+
+<details>
+<summary>✅ Answers</summary>
+
+1. Both are run, in priority order (lower first)
+2. Use the last parameter in `add_filter()` to specify how many arguments
+3. It controls the execution order of multiple filters
+4. ✅ Yes, it’s common and efficient
+
+</details>
+
+---
+
+## Homework Challenge
+
+Create a chained filter system:
+
+1. Filter name: `aditya_transform_text`
+2. Step 1 (priority 5): Convert to lowercase
+3. Step 2 (priority 10): Replace “wordpress” with “WordPress ❤️”
+4. Step 3 (priority 15): Add a signature at the end (“\~ Aditya”)
+
+🧩 Use `apply_filters()` on the string `"   I LOVE WordPress   "`
+📌 Result should be: `i love WordPress ❤️ ~ Aditya`
+
+---
+
+## Summary of Day 5
+
+- You learned **filter priority**, **multi-argument filters**, **chaining**, and **clean closures**
+- You built an **extensible pricing system**
+- You now understand how **filters structure plugin architecture**
+
+---
+
+## What is a “Filter Framework” in a Plugin?
+
+A **filter framework** means you write your plugin in a way that **allows others to change its output or behavior** by using WordPress filter hooks.
+
+You do this by:
+
+- Writing your plugin function
+- Wrapping key parts of it in `apply_filters()`
+- Allowing themes or other plugins to modify the result using `add_filter()`
+
+---
+
+## Why Use It?
+
+- **Flexible**: Anyone using your plugin can customize the result.
+- **Reusable**: Works in any theme or plugin without copying code.
+- **Safe**: Your plugin stays clean, while customization lives elsewhere.
+
+---
+
+## Let’s Build One Step-by-Step
+
+### 1. Imagine a Simple Plugin
+
+Say you want to show a **user’s bio** on their profile page.
+
+### Plugin Code (`bio-plugin.php`)
+
+```php
+<?php
+function get_user_bio($user_id) {
+    // Step 1: Get bio from database
+    $bio = get_user_meta($user_id, 'bio', true);
+
+    // Step 2: Allow others to change this bio using a filter
+    $bio = apply_filters('myplugin_user_bio', $bio, $user_id);
+
+    // Step 3: Return the (possibly modified) bio
+    return $bio;
+}
+```
+
+### What’s Happening Here?
+
+- `get_user_meta()` fetches the user’s bio.
+- `apply_filters()` gives **other developers a way to change `$bio`**.
+- `'myplugin_user_bio'` is the **filter name** (you can name it anything, but prefix it to avoid conflicts).
+
+---
+
+## 2. Customize from a Theme or Another Plugin
+
+Now, let’s say someone wants to **add the user ID** after the bio.
+
+### In a theme’s `functions.php`:
+
+```php
+add_filter('myplugin_user_bio', function($bio, $user_id) {
+    return $bio . "<br><small>User ID: $user_id</small>";
+}, 10, 2);
+```
+
+### What This Code Does:
+
+- Hooks into your filter `'myplugin_user_bio'`
+- Takes in the `$bio` and `$user_id`
+- Adds the user ID below the bio
+- Returns the new version of the bio
+
+---
+
+## How WordPress Filters Work
+
+| Function                                                 | Purpose                                                                         |
+| -------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| `apply_filters( 'hook_name', $value, ... )`              | Used in your plugin to say: “Here’s a value you can modify”                     |
+| `add_filter( 'hook_name', $function, $priority, $args )` | Used outside the plugin (like in a theme) to say: “I want to change that value” |
+
+---
+
+## Real-World Use Cases
+
+- Modify product titles in a WooCommerce plugin
+- Change email content in a contact form plugin
+- Customize widget output in a theme
+
+---
+
+## Summary
+
+✅ You use `apply_filters()` **in your plugin**
+✅ Others use `add_filter()` **in their code** to customize behavior
+✅ This creates a **Filter Framework**, making your plugin **powerful and customizable**
+
+---
+
+## Up Next: Day 6 – Build a Plugin Using Filters
+
+You’ll build your first **production-style WordPress plugin**, using:
+
+- Custom and built-in filters
+- Admin options and frontend output
+- Extensible architecture
+
+
+Great decision, Aditya! Today on **Day 6**, you'll **build a complete plugin** using all the filter knowledge you’ve gathered so far. This is where you move from theory to **real-world development**.
+
+---
+
+# 🏕️ Day 6: **Build a Real Plugin Using Filters**
+
+---
+
+## 🎯 Day 6 Objectives
+
+By the end of today’s lesson, you'll:
+
+* Build a complete, reusable WordPress plugin using filters.
+* Use both **core WordPress** and **custom filter hooks**.
+* Understand how to structure filters for **extensibility**.
+* Practice frontend and backend integration.
+
+---
+
+## 🛠️ Project: “✨ Aditya Greeting Banner Plugin”
+
+### 🔹 Goal:
+
+A plugin that:
+
+1. Shows a greeting banner at the top of every post.
+2. Allows customization of the message using filters.
+3. Adds custom styling using a filter.
+4. Shows the banner **only on single post pages**.
+
+---
+
+## 📁 Step 1: Setup Plugin Structure
+
+Create a folder inside `wp-content/plugins/`:
+
+```
+aditya-greeting-banner/
+├── aditya-greeting-banner.php
+```
+
+---
+
+## 📄 Step 2: Create the Plugin File
+
+### `aditya-greeting-banner.php`
+
+```php
+<?php
+/*
+Plugin Name: Aditya Greeting Banner
+Description: Displays a customizable greeting banner above blog posts using filters.
+Version: 1.0
+Author: Aditya Dubey
+*/
+
+defined('ABSPATH') || exit;
+
+// Step 1: Display Banner
+function agb_display_greeting($content) {
+    if (!is_single() || !is_main_query()) return $content;
+
+    // Step 2: Filter Greeting Message
+    $greeting = apply_filters('agb_greeting_text', '🙏 Welcome, dear reader!');
+
+    // Step 3: Filter Greeting Style
+    $style = apply_filters('agb_greeting_style', 'padding:10px; background:#f0f8ff; border-left:4px solid #0073aa; font-size:1.1em; margin-bottom:15px;');
+
+    $banner = "<div class='aditya-greeting-banner' style=\"$style\">$greeting</div>";
+
+    return $banner . $content;
+}
+add_filter('the_content', 'agb_display_greeting');
+```
+
+🧩 You just:
+
+* Hooked into `the_content`
+* Created two custom filters: `agb_greeting_text`, `agb_greeting_style`
+
+---
+
+## ✍️ Step 3: Extend Plugin with `add_filter()`
+
+Now in your **theme’s `functions.php`** or in another plugin, try:
+
+```php
+add_filter('agb_greeting_text', function($msg) {
+    return "🌟 Namaste! You're reading something special.";
+});
+
+add_filter('agb_greeting_style', function($style) {
+    return $style . ' color: #333; font-family: Georgia;';
+});
+```
+
+✅ This modifies **both** the message and the style—without touching the plugin!
+
+---
+
+## 💡 Step 4 (Optional): Add Filter for Visibility Logic
+
+Make it so even the **visibility** of the banner is controllable.
+
+```php
+// Modify plugin file
+function agb_display_greeting($content) {
+    if (!is_single() || !is_main_query()) return $content;
+
+    // Allow devs to disable banner
+    $show = apply_filters('agb_show_banner', true);
+    if (!$show) return $content;
+
+    $greeting = apply_filters('agb_greeting_text', '🙏 Welcome, dear reader!');
+    $style = apply_filters('agb_greeting_style', 'padding:10px; background:#f0f8ff; border-left:4px solid #0073aa; font-size:1.1em; margin-bottom:15px;');
+
+    $banner = "<div class='aditya-greeting-banner' style=\"$style\">$greeting</div>";
+
+    return $banner . $content;
+}
+```
+
+Then in your theme:
+
+```php
+add_filter('agb_show_banner', function() {
+    return !is_user_logged_in(); // Only show to guests
+});
+```
+
+---
+
+## 🧠 Summary of Architecture
+
+| Hook Name            | Purpose                                |
+| -------------------- | -------------------------------------- |
+| `the_content`        | WordPress hook to insert HTML          |
+| `agb_greeting_text`  | Your custom hook for text              |
+| `agb_greeting_style` | Your custom hook for styling           |
+| `agb_show_banner`    | Your custom hook for conditional logic |
+
+This is how **big plugins like WooCommerce** build their extensible logic.
+
+---
+
+## ✅ Day 6 Summary
+
+You learned how to:
+
+* Build a real plugin from scratch
+* Insert dynamic HTML with `the_content` filter
+* Create and use **custom filters** (`apply_filters`)
+* Let other devs (or future you) hook into it using `add_filter`
+
+---
+
+## 🧪 Homework Challenge
+
+Create another plugin:
+
+🎯 Plugin Name: `Aditya Post Signature`
+
+**Requirements**:
+
+1. Add a custom signature at the end of all blog posts.
+2. Use these filter hooks:
+
+   * `aditya_signature_text` → default: “\~ Written by Aditya”
+   * `aditya_signature_style` → default: italic gray text
+   * `aditya_signature_enable` → return true/false
+
+Use `the_content` to insert the signature at the end.
+
+📩 Submit your code here and I’ll review it personally.
+
+---
+
+## 🔮 Up Next: **Day 7 – Final Project + Recap**
+
+In Day 7:
+
+* You’ll build a final filter-based plugin project.
+* Recap all filter levels: beginner to advanced.
+* Receive your **Filter Mastery Badge** (optional visual badge for fun 😄).
+
+Would you like to:
+
+* Start Day 7 now?
+* Or need review/help with today’s plugin before continuing?
+
+Let me know, captain of clean code! 🧠👨‍💻
