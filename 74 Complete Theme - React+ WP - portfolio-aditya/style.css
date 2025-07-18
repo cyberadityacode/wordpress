@@ -1,0 +1,119 @@
+/*
+Theme Name: Portfolio Aditya Dubey
+Description: React based Portfolio Site of Aditya
+Author: Aditya Dubey
+Version: 1.0
+*/
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pagination .page-numbers {
+  display: inline-block;
+  padding: 8px 12px;
+  font-size: 16px;
+  text-decoration: none;
+  color: #333;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  transition: all 0.2s ease-in-out;
+}
+
+.pagination .page-numbers:hover {
+  background-color: #4f46e5;
+  color: #fff;
+  border-color: #4f46e5;
+}
+
+.pagination .current {
+  background-color: #4f46e5;
+  color: #fff;
+  border-color: #4f46e5;
+  font-weight: bold;
+  cursor: default;
+}
+.post-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 5px;
+}
+
+.post-content blockquote {
+  padding: 10px 20px;
+  background: #f3f4f6;
+  border-left: 4px solid #4f46e5;
+  margin: 20px 0;
+}
+
+.post-content h2 {
+  margin-top: 2rem;
+  font-size: 1.5rem;
+}
+.post-navigation a {
+  color: #4f46e5;
+  text-decoration: none;
+  font-weight: bold;
+}
+.post-navigation a:hover {
+  text-decoration: underline;
+}
+
+.comment-list {
+  margin-top: 2rem;
+  list-style: none;
+  padding: 0;
+}
+
+.comment {
+  border-bottom: 1px solid #ddd;
+  padding: 1rem 0;
+}
+
+.comment-author {
+  font-weight: bold;
+  color: #333;
+}
+
+.comment-meta {
+  font-size: 0.9rem;
+  color: #777;
+}
+
+.comment-content {
+  margin-top: 0.5rem;
+}
+
+#respond {
+  margin-top: 2rem;
+}
+
+#respond input,
+#respond textarea {
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+}
+.site-footer {
+  background: #fefefe;
+  color: #020000;
+  padding: 20px;
+  text-align: center;
+}
+.footer-socials {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0;
+}
+.footer-socials li {
+  display: inline-block;
+  margin: 0 10px;
+}
+.footer-socials a {
+  color: #040101;
+  text-decoration: none;
+}
