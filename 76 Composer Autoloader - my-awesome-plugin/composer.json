@@ -1,0 +1,15 @@
+{
+    "name": "admin/my-awesome-plugin",
+    "autoload": {
+        "psr-4": {
+            "MyAwesomePlugin\\": "includes/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Aditya Dubey",
+            "email": "adityadubey793@gmail.com"
+        }
+    ],
+    "require": {}
+}
