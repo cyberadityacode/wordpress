@@ -35,8 +35,19 @@ wp theme delete twentytwenty
 wp user list
 wp user create john john@test.com --role=editor
 wp user update <user> --user_pass="YourNewPassword" //change user password
+wp user reset-password <user> --show-password
 
 wp user update <user> --role=administrator
+
+## Day 5
+
+wp post list
+wp post delete 12 --force
+wp post list --post_type=page --format=ids // list all post ids
+
+wp post delete $(wp post list --post_type=page --format=ids) --force //it works like sql subqueries => delete all page post
+
+wp post create --post_type=page --post_title="Test Page"
 
 Aditya Dubey
 cyberadityacode
