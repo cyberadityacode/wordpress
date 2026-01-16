@@ -15,5 +15,20 @@ wp core update
 wp core download
 wp core verify-checksums
 
+## Day 3
+
+plugins
+
+wp plugin list
+wp plugin install woocommerce --activate
+wp plugin update --all
+wp plugin delete hello
+
+themes
+
+wp theme list
+wp theme install astra --activate
+wp theme delete twentytwenty
+
 Aditya Dubey
 cyberadityacode
