@@ -49,5 +49,36 @@ wp post delete $(wp post list --post_type=page --format=ids) --force //it works 
 
 wp post create --post_type=page --post_title="Test Page"
 
+## DAY 6 – Database & Search Replace
+
+Export & import
+wp db export backup.sql
+wp db import backup.sql
+
+## DAY 7 – Automation & Advanced
+
+wp cron event list
+wp cron event run --due-now
+
+wp config list
+wp config set WP_DEBUG true
+
+wp plugin list --status=active //list all active plugins
+
+## Real-world professional uses
+
+wp maintenance-mode activate
+wp plugin update --all
+wp theme update --all
+wp maintenance-mode deactivate
+
+Prevents users from:
+
+seeing errors
+
+broken layouts
+
+half-updated pages
+
 Aditya Dubey
 cyberadityacode
