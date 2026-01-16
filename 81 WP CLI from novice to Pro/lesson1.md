@@ -30,5 +30,13 @@ wp theme list
 wp theme install astra --activate
 wp theme delete twentytwenty
 
+## Day 4
+
+wp user list
+wp user create john john@test.com --role=editor
+wp user update <user> --user_pass="YourNewPassword" //change user password
+
+wp user update <user> --role=administrator
+
 Aditya Dubey
 cyberadityacode
