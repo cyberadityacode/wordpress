@@ -29,3 +29,10 @@ If I don't type and access the plugin PATH
 http://learndevelopment.local:10013/wp-content/plugins/champion-logic/champion-logic.php
 
 Fatal error: Uncaught Error: Call to undefined function add_action() in /home/aditya/Local Sites/learndevelopment/app/public/wp-content/plugins/champion-logic/champion-logic.php:22 Stack trace: #0 /home/aditya/Local Sites/learndevelopment/app/public/wp-content/plugins/champion-logic/champion-logic.php(51): Champion_Logic->\_\_construct() #1 {main} thrown in /home/aditya/Local Sites/learndevelopment/app/public/wp-content/plugins/champion-logic/champion-logic.php on line 22
+
+- In WordPress, both esc_html() and esc_html_e() are used to escape text for safe output in HTML, but they differ in what they do with the result.
+  Use esc_html() when you need the value first
+
+Use esc_html_e() when you want to print immediately
+
+esc_html_e() is translation-ready
